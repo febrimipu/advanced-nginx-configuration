@@ -1,0 +1,24 @@
+# add into the section of listening
+server {
+       listen       443 http2 ssl default_server;
+       listen       [::]:443 http2 ssl default_server;
+       server_name  www.emondak.pu.go.id emondak.pu.go.id;
+       root         /var/www/html;
+
+       index index.html index.php index.htm index.nginx-debian.html;
+
+       location / {
+	   if ($scheme = http) {
+               rewrite ^ https://$server_name$request_uri? permanent;
+       }
+           proxy_pass http://10.30.10.106:8001;
+	  
+}
+       
+
+       ssl_certificate /etc/nginx/ssl/emondak.pu.go.id/emondak_pu_go_id_bundle.crt;
+       ssl_certificate_key /etc/nginx/ssl/emondak.pu.go.id/emondak_pu_go_id.key;
+       ssl_session_cache shared:SSL:1m;
+       ssl_session_timeout  10m;
+
+}
